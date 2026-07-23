@@ -135,14 +135,14 @@ impl GuestBuilder {
             for message in Message::parse_stream(BufReader::new(stdout)) {
                 match message.context("failed to parse nested Cargo JSON output")? {
                     Message::CompilerArtifact(artifact) => {
-                        if artifact.package_id == package_id && artifact.target.is_cdylib() {
-                            if let Some(path) = artifact
+                        if artifact.package_id == package_id
+                            && artifact.target.is_cdylib()
+                            && let Some(path) = artifact
                                 .filenames
                                 .iter()
                                 .find(|path| path.extension() == Some("wasm"))
-                            {
-                                wasm_path = Some(path.as_std_path().to_path_buf());
-                            }
+                        {
+                            wasm_path = Some(path.as_std_path().to_path_buf());
                         }
                     }
                     Message::CompilerMessage(message) => {

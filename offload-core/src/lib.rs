@@ -1,4 +1,3 @@
-
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
@@ -82,20 +81,7 @@ macro_rules! impl_an_primitive {
     ($($ty:ty),+ $(,)?) => { $(impl AnCompatible for $ty {})+ };
 }
 
-impl_an_primitive!(
-    u8,
-    u16,
-    u32,
-    u64,
-    i8,
-    i16,
-    i32,
-    i64,
-    bool,
-    char,
-    String,
-    (),
-);
+impl_an_primitive!(u8, u16, u32, u64, i8, i16, i32, i64, bool, char, String, (),);
 
 impl<T: AnCompatible> AnCompatible for Vec<T> {}
 impl<T: AnCompatible> AnCompatible for Option<T> {}

@@ -312,16 +312,16 @@ impl<'ast> Visit<'ast> for TypeInspection {
     }
 
     fn visit_type_path(&mut self, node: &'ast syn::TypePath) {
-        if node.qself.is_none() {
-            if let Some(segment) = node.path.segments.last() {
-                let name = segment.ident.to_string();
-                if matches!(name.as_str(), "usize" | "isize") {
-                    self.pointer_sized_integer
-                        .get_or_insert((segment.ident.span(), name.clone()));
-                }
-                if matches!(name.as_str(), "f32" | "f64") {
-                    self.float.get_or_insert((segment.ident.span(), name));
-                }
+        if node.qself.is_none()
+            && let Some(segment) = node.path.segments.last()
+        {
+            let name = segment.ident.to_string();
+            if matches!(name.as_str(), "usize" | "isize") {
+                self.pointer_sized_integer
+                    .get_or_insert((segment.ident.span(), name.clone()));
+            }
+            if matches!(name.as_str(), "f32" | "f64") {
+                self.float.get_or_insert((segment.ident.span(), name));
             }
         }
         visit::visit_type_path(self, node);
@@ -357,13 +357,13 @@ fn validate_boundary_type(ty: &Type, options: &OffloadOptions) -> syn::Result<()
             ),
         ));
     }
-    if options.deny_floats {
-        if let Some((span, name)) = inspection.float {
-            return Err(syn::Error::new(
-                span,
-                format!("`{name}` cannot cross an AN-compatible offload boundary"),
-            ));
-        }
+    if options.deny_floats
+        && let Some((span, name)) = inspection.float
+    {
+        return Err(syn::Error::new(
+            span,
+            format!("`{name}` cannot cross an AN-compatible offload boundary"),
+        ));
     }
     Ok(())
 }

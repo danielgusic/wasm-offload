@@ -183,13 +183,13 @@ fn parse_manifest(module: &[u8]) -> Result<HashMap<String, u64>, OffloadError> {
                     guest: record.abi_version,
                 });
             }
-            if let Some(previous) = records.insert(record.export_name.clone(), record.sig_hash) {
-                if previous != record.sig_hash {
-                    return Err(OffloadError::Runtime(anyhow::anyhow!(
-                        "conflicting manifest records for `{}`",
-                        record.export_name
-                    )));
-                }
+            if let Some(previous) = records.insert(record.export_name.clone(), record.sig_hash)
+                && previous != record.sig_hash
+            {
+                return Err(OffloadError::Runtime(anyhow::anyhow!(
+                    "conflicting manifest records for `{}`",
+                    record.export_name
+                )));
             }
             bytes = rest;
         }

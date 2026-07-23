@@ -152,7 +152,11 @@ impl OffloadTarget for WasmtimeTarget {
     }
 }
 
-fn do_call(shared: &mut SharedInstance, export: &str, args: &[u8]) -> Result<Vec<u8>, OffloadError> {
+fn do_call(
+    shared: &mut SharedInstance,
+    export: &str,
+    args: &[u8],
+) -> Result<Vec<u8>, OffloadError> {
     let len = u32::try_from(args.len())
         .map_err(|_| OffloadError::Runtime(anyhow::anyhow!("argument buffer exceeds 4 GiB")))?;
 

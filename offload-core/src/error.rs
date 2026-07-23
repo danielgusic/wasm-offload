@@ -16,7 +16,10 @@ pub enum OffloadError {
         expected: u64,
         found: u64,
     },
-    AbiVersion { host: u32, guest: u32 },
+    AbiVersion {
+        host: u32,
+        guest: u32,
+    },
     #[cfg(feature = "std")]
     Runtime(anyhow::Error),
 }
